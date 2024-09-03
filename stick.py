@@ -10,7 +10,7 @@ class Stick:
 
         # Stick properties
         self.length = 200
-        self.width = 5
+        self.width = 25
         self.mass = 10
 
         # Create the stick body and shape
@@ -25,8 +25,9 @@ class Stick:
         # Store a reference to the cue ball
         self.cue_ball = cue_ball
 
-        self.fixed_distance = 200
+        self.fixed_distance = self.cue_ball.radius + (self.length // 2)
 
+        self.max_power = 500
 
 
     def update(self, cue_ball_position):
@@ -36,9 +37,11 @@ class Stick:
         # Calculate the direction vector from the cue ball to the mouse position
         direction = pygame.Vector2(mouse_pos) - pygame.Vector2(self.cue_ball.body.position)
 
+        self.fixed_distance = max(self.cue_ball.radius + (self.length / 2), min(direction.length(), self.max_power))  # Adjust max distance as needed
+
+
         # Normalize the direction and scale it by the fixed distance
         direction = direction.normalize() * self.fixed_distance
-
         # Calculate the angle between the stick and the cue ball
         angle = math.atan2(direction.y, direction.x)
 
@@ -51,6 +54,25 @@ class Stick:
         self.body.position = self.cue_ball.body.position + direction
 
 
+
+    def hit_ball(self):
+        mouse_pos = pygame.mouse.get_pos()
+
+        direction = pygame.Vector2(self.body.position) - pygame.Vector2(self.cue_ball.body.position)
+
+        # self.fixed_distance = max(self.cue_ball.radius + (self.length / 2), min(direction.length(), self.max_power))  # Adjust max distance as needed
+
+
+        # Normalize the direction and scale it by the fixed distance
+        direction = direction.normalize()
+        # Calculate the angle between the stick and the cue ball
+        angle = math.atan2(direction.y, direction.x)
+
+        x_impluse = math.sin(math.radians(angle))
+        y_impulse = math.cos(math.radians(angle))
+
+        mul = 10000
+        self.body.apply_impulse_at_local_point((x_impluse * mul, y_impulse * mul), (0, 0))
 
     def draw(self, surface):
         # x = int(self.body.position.x) - (self.width // 2)

@@ -7,9 +7,9 @@ class Ball:
     def __init__(self, x, y, color, space, static_body):
         self.x = x
         self.y = y
-        self.radius = 32
+        self.radius = 16
 
-        self.body = pymunk.Body(10, 1, pymunk.Body.STATIC)
+        self.body = pymunk.Body(10, 1, pymunk.Body.DYNAMIC)
         self.body.position = (x, y)
 
         self.shape = pymunk.Circle(self.body, self.radius)

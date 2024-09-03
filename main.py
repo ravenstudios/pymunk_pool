@@ -51,7 +51,8 @@ def main():
                     running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            stick.body.apply_impulse_at_local_point((0, -2000), (0, 0))
+            # stick.body.apply_impulse_at_local_point((0, -2000), (0, 0))
+            stick.hit_ball()
 
 
         draw()
